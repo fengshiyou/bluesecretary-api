@@ -14,6 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/bluesecretaryHook','GithubHookController@index');
+
 Route::get('/z', function () {
     return 3;
 });
