@@ -55,9 +55,9 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST'.env("APP_ENV"), 'localhost'),
-            'database'  => env('DB_DATABASE'.env("APP_ENV"), 'forge'),
-            'username'  => env('DB_USERNAME'.env("APP_ENV"), 'forge'),
-            'password'  => env('DB_PASSWORD'.env("APP_ENV"), ''),
+            'database'  => env('DB_DATABASE_'.env("APP_ENV"), 'forge'),
+            'username'  => env('DB_USERNAME_'.env("APP_ENV"), 'forge'),
+            'password'  => env('DB_PASSWORD_'.env("APP_ENV"), ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

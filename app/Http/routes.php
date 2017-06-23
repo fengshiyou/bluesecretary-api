@@ -14,8 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+//github hook
 Route::post('/bluesecretaryHook','GithubHookController@index');
 
-Route::get('/z', function () {
-    return 11;
-});
+//用户登录
+Route::post('/login','UserController@login');
+
+Route::get('/test','TestController@index');
