@@ -41,3 +41,14 @@ if (!function_exists('resp_json')) {
         return response()->json($result, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }
+if (!function_exists('get_rand_char')) {
+    function get_rand_char($length,$strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz")
+    {
+        $str = null;
+        $max = strlen($strPol) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $strPol[rand(0, $max)];//rand($min,$max)生成介于min和max两个数之间的一个随机整数
+        }
+        return $str;
+    }
+}

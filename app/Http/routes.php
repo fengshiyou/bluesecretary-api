@@ -20,4 +20,11 @@ Route::post('/bluesecretaryHook','GithubHookController@index');
 //用户登录
 Route::post('/login','UserController@login');
 
-Route::get('/test','TestController@index');
+//用户注册
+Route::post('/register','UserController@register');
+
+
+
+Route::group(['middleware' => 'checklogin'], function () {
+    Route::get('/test','TestController@index');
+});

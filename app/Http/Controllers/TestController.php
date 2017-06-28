@@ -19,7 +19,8 @@ class TestController extends Controller
     {
         //
 //        $z = TestService::test();
-//        var_dump( $z);
+        $z = 1;
+        var_dump( $z);
 
     }
 
