@@ -44,29 +44,31 @@ class UserController extends Controller
         return resp_suc($return_data);
 
     }
-    public function register(){
+
+    public function register()
+    {
         $pro = array(
-            'account'=>'required|regex:/^1[34578][0-9]{9}$/',
-            'passwd'=>'required|digits_between:6,16',
-            'captcha'=>'required'
+            'account' => 'required|regex:/^1[34578][0-9]{9}$/',
+            'passwd' => 'required|digits_between:6,16',
+            'captcha' => 'required'
         );
-        if ($this->app_validata($pro,$error,$p)){
-            return resp_err(5001,$error);
+        if ($this->app_validata($pro, $error, $p)) {
+            return resp_err(5001, $error);
         }
-        $user_info = UserModel::where('account',$p['account'])->first();
-        if ($user_info){
+        $user_info = UserModel::where('account', $p['account'])->first();
+        if ($user_info) {
             return resp_err(1002);
         }
         $captcha = '0000';//@todo 验证码需要重写
 
-        if ($p['captcha'] != $captcha){
+        if ($p['captcha'] != $captcha) {
             return resp_err(2001);
         }
 
         $solt = get_rand_char(4);
         $user_model = new UserModel();
         $user_model->account = $p['account'];
-        $user_model->passwd = md5($p['passwd'].$solt);
+        $user_model->passwd = md5($p['passwd'] . $solt);
         $user_model->solt = $solt;
         $user_model->save();
 
