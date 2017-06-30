@@ -16,6 +16,8 @@ class TestController extends Controller
     public function index()
     {
         //
+        $arr = array ('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5);
+        return 11111;
         return resp_suc();
         Event::setQueueResolver(function () {
             return Queue::connection('captcha');
