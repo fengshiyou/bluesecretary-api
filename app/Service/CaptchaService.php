@@ -3,7 +3,7 @@ namespace App\Service;
 
 use App\Events\CaptchaEvent;
 use Event;
-use Illuminate\Contracts\Queue\Queue;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -25,7 +25,7 @@ Class CaptchaService
     //生成验证码
     public static function make_captcha($call, $captcha_type)
     {
-        $captcha = random_int(10000, 99999);
+        $captcha = random_int(1000, 9999);
         $redis = Redis::connection('captcha');
         //redis递增计数----计数某个手机已经申请验证码发送次数，24小时内限制已经发送次数
         $count = $redis->incrby('CAPTCHA_COUNT_' . $call . '_' . date('Y-m-d', time()), 1);

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TestEvent;
+use Event;
 use App\Service\CaptchaService;
 use App\Service\TestService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Queue;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class TestController extends Controller
 {
@@ -49,88 +50,10 @@ class TestController extends Controller
     public function index()
     {
         //
-//        $z = TestService::test();
-        $z = array(
-            "code" => 0,
-            "msg" => "OK",
-            "data"=>[
-                "id"=>"1111",
-                "testCode"=>"22222",
-            ],
-            "status"=>"OK",
-            "count"=>14
-        );
-        return resp_json($z);
-        $result = CaptchaService::makeCaptcha(15285588389, 'RG_');
-        return $result;
-//        $z = 1;
-//        var_dump( $z);
-
+        Event::setQueueResolver(function () {
+            return Queue::connection('captcha');
+        })->fire(new TestEvent(55,66));
+        Event::setQueueResolver()->fire(new TestEvent(55,66));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

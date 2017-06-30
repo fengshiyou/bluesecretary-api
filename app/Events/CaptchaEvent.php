@@ -15,6 +15,8 @@ class CaptchaEvent extends Event
      *
      * @return void
      */
+    public $call;
+    public $captcha;
     public function __construct($call,$captcha)
     {
         //

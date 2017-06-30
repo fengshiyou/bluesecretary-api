@@ -36,5 +36,6 @@ Class AliyunSMS
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
 //        var_dump(curl_exec($curl));
+        curl_exec($curl);
     }
 }

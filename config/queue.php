@@ -72,6 +72,12 @@ return [
             'queue'      => 'default',
             'expire'     => 60,
         ],
+        'captcha' => [
+            'driver' => 'redis',
+            'connection' => 'captcha',
+            'queue'  => 'captcha',
+            'expire' => 60,
+        ],
 
     ],
 
