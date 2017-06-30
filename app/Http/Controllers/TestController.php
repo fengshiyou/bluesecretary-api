@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Service\CaptchaService;
 use App\Service\TestService;
 use Illuminate\Http\Request;
 
@@ -11,16 +12,59 @@ use App\Http\Controllers\Controller;
 class TestController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @api {get} /test 接口测试
+     * @apiDescription 根据ID（id）获取列表信息
+     * @apiGroup test APIs
      *
-     * @return \Illuminate\Http\Response
+     *
+     * @apiParamExample {string} 请求参数格式:
+     *    ?id=123&page=1&perpage=20
+     *
+     * @apiVersion 1.0.0
+     * @apiErrorExample {json} 错误返回值:
+     *     {
+     *        "code": 10003,
+     *        "msg": "ParametersError [Method]:get_tests参数错误!",
+     *        "error": {
+     *            "id": "",
+     *            "page": "",
+     *            "perpage": ""
+     *        },
+     *       "status": "fail"
+     *     }
+     * @apiSuccessExample {json} 正确返回值:
+     *     {
+     *   "code": 0,
+     *   "msg": "OK ",
+     *   "data": [
+     *       {
+     *           "id": "622051004185471233",
+     *           "testCode": "000050",
+     *       }
+     *   ],
+     *   "status": "ok",
+     *   "count": "14"
+     *   }
      */
     public function index()
     {
         //
 //        $z = TestService::test();
-        $z = 1;
-        var_dump( $z);
+        $z = array(
+            "code" => 0,
+            "msg" => "OK",
+            "data"=>[
+                "id"=>"1111",
+                "testCode"=>"22222",
+            ],
+            "status"=>"OK",
+            "count"=>14
+        );
+        return resp_json($z);
+        $result = CaptchaService::makeCaptcha(15285588389, 'RG_');
+        return $result;
+//        $z = 1;
+//        var_dump( $z);
 
     }
 
@@ -37,7 +81,7 @@ class TestController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,7 +92,7 @@ class TestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -59,7 +103,7 @@ class TestController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -70,8 +114,8 @@ class TestController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -82,7 +126,7 @@ class TestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

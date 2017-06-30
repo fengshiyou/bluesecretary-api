@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\UserModel;
+use App\Service\CaptchaService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,25 +12,23 @@ use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
-    /**
-     * 用户登录
-     */
     public function login()
     {
         $pro = array(
-            'account' => 'required|regex:/^1[34578][0-9]{9}$/',
+            'call' => 'required|regex:/^1[34578][0-9]{9}$/',
             'passwd' => 'required|digits_between:6,16',
         );
         if ($this->app_validata($pro, $error, $p)) {
             return resp_err(5001, $error);
         }
-        $acount = $p['account'];
+        $acount = $p['call'];
 
-        $user_info = UserModel::where('account', $acount)->first();
+        $user_info = UserModel::where('call', $acount)->first();
         if (!$user_info) {
             return resp_err(1001);
         }
         $passwd = md5($p['passwd'] . $user_info->solt);
+
         if ($passwd != $user_info['passwd']) {
             return resp_err(1001);
         }
@@ -48,31 +47,48 @@ class UserController extends Controller
     public function register()
     {
         $pro = array(
-            'account' => 'required|regex:/^1[34578][0-9]{9}$/',
+            'call' => 'required|regex:/^1[34578][0-9]{9}$/',
             'passwd' => 'required|digits_between:6,16',
             'captcha' => 'required'
         );
         if ($this->app_validata($pro, $error, $p)) {
             return resp_err(5001, $error);
         }
-        $user_info = UserModel::where('account', $p['account'])->first();
+        $user_info = UserModel::where('call', $p['call'])->first();
         if ($user_info) {
             return resp_err(1002);
         }
-        $captcha = '0000';//@todo 验证码需要重写
+        $check_captcha = CaptchaService::check_captcha($p['call'], 'RG_', $p['captcha']);
 
-        if ($p['captcha'] != $captcha) {
-            return resp_err(2001);
+        if ($check_captcha !== 1) {
+            return $check_captcha;
         }
 
         $solt = get_rand_char(4);
         $user_model = new UserModel();
-        $user_model->account = $p['account'];
+        $user_model->call = $p['call'];
         $user_model->passwd = md5($p['passwd'] . $solt);
         $user_model->solt = $solt;
         $user_model->save();
 
         return $this->login();
+    }
+
+    public function register_captcha()
+    {
+        $pro = array(
+            'call' => 'required|regex:/^1[34578][0-9]{9}$/',
+            'passwd' => 'required|digits_between:6,16',
+        );
+        if ($this->app_validata($pro, $error, $p)) {
+            return resp_err(5001, $error);
+        }
+        $status = CaptchaService::make_captcha($p['call'], 'RG_');//RG  注册时的验证码
+        if ($status !== 1){
+            return $status;
+        }
+
+        return resp_suc('短信已成功发送至'.$p['call']);
     }
 
 }

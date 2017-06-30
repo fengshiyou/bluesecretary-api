@@ -17,14 +17,15 @@ Route::get('/', function () {
 //github hook
 Route::post('/bluesecretaryHook','GithubHookController@index');
 
-//用户登录
-Route::post('/login','UserController@login');
 
-//用户注册
-Route::post('/register','UserController@register');
+Route::post('/login','UserController@login');//用户登录
+Route::post('/register','UserController@register');//用户注册
+Route::post('/register/captcha','UserController@register_captcha');//注册验证码
+//忘记密码
+//重置密码
 
-
+Route::get('/test','TestController@index');
 
 Route::group(['middleware' => 'checklogin'], function () {
-    Route::get('/test','TestController@index');
+
 });

@@ -1,0 +1,23 @@
+{
+  "name": "蓝秘书",
+  "version": "1.0.0",
+  "description": "蓝秘书接口文档",
+  "title": "蓝秘书",
+  "url" : "http://119.23.8.150:8080",
+  "sampleUrl" : "http://119.23.8.150:8080",
+  "order": [
+
+  ],
+  "header": {
+    "title": "接口说明",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "其它补充",
+    "filename": "footer.md"
+  },
+  "template": {
+    "forceLanguage": "en"
+  }
+}
+

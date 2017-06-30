@@ -5,4 +5,4 @@ Homestead.json
 .env
 vendor/
 composer.lock
-
+doc/
