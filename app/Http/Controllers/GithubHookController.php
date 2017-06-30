@@ -31,7 +31,7 @@ class GithubHookController extends Controller
         }
     }
     public function make_apidoc(){
-        $path = ' /data/www/bluesecretary-api';
+        $path = ' /data/bluesecretary-api';
         $passwd = 'Ace___7';
         $shell_command = "cd $path && echo '$passwd' | /usr/bin/sudo -S sh apidoc.sh ";
         shell_exec($shell_command);
