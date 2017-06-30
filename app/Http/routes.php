@@ -25,6 +25,7 @@ Route::post('/register/captcha','UserController@register_captcha');//注册验�
 //重置密码
 
 Route::get('/test','TestController@index');
+Route::get('/apidoc','GithubHookController@make_apidoc');
 
 Route::group(['middleware' => 'checklogin'], function () {
 
