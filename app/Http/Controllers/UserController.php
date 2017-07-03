@@ -99,7 +99,6 @@ class UserController extends Controller
      * "token": "5oYbL2F1mDKycPQu", #token凭证
      * "user_info":""  #不知道具体业务  暂时没数据
      * }
-     * }
      */
     public function register()
     {
