@@ -16,6 +16,9 @@ class TestController extends Controller
     public function index()
     {
         //
+        $test = new TestService();
+        $z = $test->test2();
+        var_dump($z);die;
         $arr = array ('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5);
         return 11111;
         return resp_suc();

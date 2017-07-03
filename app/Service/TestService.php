@@ -17,4 +17,7 @@ Class TestService
         $z = $redis->get('a');
         return $z;
     }
+    public function test2(){
+        return 1;
+    }
 }
