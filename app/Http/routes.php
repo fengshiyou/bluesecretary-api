@@ -30,5 +30,5 @@ Route::post('/resetpass/forget','UserController@resetpass_forget');//忘记密�
 Route::get('/test','TestController@index');
 
 Route::group(['middleware' => 'checklogin'], function () {
-
+    Route::post('/resetpass/set','UserController@resetpass_set');//忘记密码->重置密码
 });
