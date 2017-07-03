@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Redis;
 class UserController extends Controller
 {
     /**
-     * @api {post} /login
-     * @apiDescription 用户登录
+     * @api {post} /login 用户登录
+     * @apiDescription 手机号有验证11位正确格式，密码6~16位
      * @apiGroup 01-user
      * @apiName login
      *
@@ -71,8 +71,8 @@ class UserController extends Controller
 
     }
     /**
-     * @api {post} /register
-     * @apiDescription 用户注册
+     * @api {post} /register 用户注册
+     * @apiDescription 手机号有验证11位正确格式，密码6~16位
      * @apiGroup 01-user
      * @apiName register
      *
@@ -129,8 +129,8 @@ class UserController extends Controller
         return $this->login();
     }
     /**
-     * @api {post} /register/captcha
-     * @apiDescription 注册验证码
+     * @api {post} /register/captcha 注册验证码
+     * @apiDescription 手机号有验证11位正确格式，注册过的手机不可申请验证码
      * @apiGroup 01-user
      * @apiName register/captcha
      *
