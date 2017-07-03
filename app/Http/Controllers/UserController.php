@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Redis;
 class UserController extends Controller
 {
     /**
-     * @api {post} /login 用户登录
+     * @api {post} /login 03-用户登录
      * @apiDescription 手机号有验证11位正确格式，密码6~16位
      * @apiGroup 01-user
      * @apiName login
@@ -71,7 +71,7 @@ class UserController extends Controller
 
     }
     /**
-     * @api {post} /register 用户注册
+     * @api {post} /register 02-用户注册
      * @apiDescription 手机号有验证11位正确格式，密码6~16位
      * @apiGroup 01-user
      * @apiName register
@@ -79,6 +79,7 @@ class UserController extends Controller
      *
      * @apiParam {String} call 注册的手机号
      * @apiParam {String} passwd 用户密码
+     * @apiParam {String} passwd_check 用户密码
      * @apiParam {int} captcha 验证码
      *
      * @apiVersion 1.0.0
@@ -104,10 +105,14 @@ class UserController extends Controller
         $pro = array(
             'call' => 'required|regex:/^1[34578][0-9]{9}$/',
             'passwd' => 'required|digits_between:6,16',
+            'passwd_check' => 'required|digits_between:6,16',
             'captcha' => 'required'
         );
         if ($this->app_validata($pro, $error, $p)) {
             return resp_err(5001, $error);
+        }
+        if ($p['passwd'] != $p['passwd_check']){
+            return resp_err(1003);
         }
         $user_info = UserModel::where('call', $p['call'])->first();
         if ($user_info) {
@@ -129,10 +134,10 @@ class UserController extends Controller
         return $this->login();
     }
     /**
-     * @api {post} /register/captcha 注册验证码
+     * @api {post} /captcha/register 01-验证码->用户注册
      * @apiDescription 手机号有验证11位正确格式，注册过的手机不可申请验证码
      * @apiGroup 01-user
-     * @apiName register/captcha
+     * @apiName captcha/register
      *
      *
      * @apiParam {String} call 注册的手机号
@@ -151,7 +156,7 @@ class UserController extends Controller
     "data": "短信已成功发送至15285588389"
     }
      */
-    public function register_captcha()
+    public function captcha_register()
     {
         $pro = array(
             'call' => 'required|regex:/^1[34578][0-9]{9}$/',
@@ -169,6 +174,99 @@ class UserController extends Controller
         }
 
         return resp_suc('短信已成功发送至'.$p['call']);
+    }
+    /**
+     * @api {post} /captcha/forgetpass 04-验证码->忘记密码
+     * @apiDescription 手机号有验证11位正确格式，没有注册过的用户不可发送验证码
+     * @apiGroup 01-user
+     * @apiName captcha/forgetpass
+     *
+     *
+     * @apiParam {String} call 注册的手机号
+     *
+     * @apiVersion 1.0.0
+     * @apiErrorExample {json} 错误返回值:
+    {
+    "code": 1004,
+    "detail": "该手机号并未注册",
+    "data": ""
+    }
+     * @apiSuccessExample {json} 正确返回值:
+    {
+    "code": 200,
+    "detail": "success",
+    "data": "短信已成功发送至15285588389"
+    }
+     */
+    public function captcha_forgetpass()
+    {
+        $pro = array(
+            'call' => 'required|regex:/^1[34578][0-9]{9}$/',
+        );
+        if ($this->app_validata($pro, $error, $p)) {
+            return resp_err(5001, $error);
+        }
+        $user_info = UserModel::where('call', $p['call'])->first();
+        if (!$user_info) {
+            return resp_err(1004);
+        }
+        $status = CaptchaService::make_captcha($p['call'], 'FG_');//FG  忘记密码的验证码
+        if ($status !== 1){
+            return $status;
+        }
+
+        return resp_suc('短信已成功发送至'.$p['call']);
+    }
+    /**
+     * @api {post} /resetpass/forget 05-重置密码->忘记密码
+     * @apiDescription 手机号有验证11位正确格式
+     * @apiGroup 01-user
+     * @apiName captcha/forgetpass
+     *
+     *
+     * @apiParam {String} call 注册的手机号
+     * @apiParam {String} passwd 用户密码
+     * @apiParam {String} passwd_check 用户密码
+     * @apiParam {int} captcha 验证码
+     *
+     * @apiVersion 1.0.0
+     * @apiErrorExample {json} 错误返回值:
+    {
+    "code": 1004,
+    "detail": "该手机号并未注册",
+    "data": ""
+    }
+     * @apiSuccessExample {json} 正确返回值:
+    {
+    "code": 200,
+    "detail": "success",
+    "data": "密码重置成功"
+    }
+     */
+    public function resetpass_forget(){
+        $pro = array(
+            'call' => 'required|regex:/^1[34578][0-9]{9}$/',
+            'passwd' => 'required|digits_between:6,16',
+            'passwd_check' => 'required|digits_between:6,16',
+            'captcha' => 'required'
+        );
+        if ($this->app_validata($pro, $error, $p)) {
+            return resp_err(5001, $error);
+        }
+        if ($p['passwd'] != $p['passwd_check']){
+            return resp_err(1003);
+        }
+
+        $user_info = UserModel::where('call', $p['call'])->first();
+        if (!$user_info) {
+            return resp_err(1004);
+        }
+        $check_captcha = CaptchaService::check_captcha($p['call'], 'FG_', $p['captcha']);
+
+        if ($check_captcha !== 1) {
+            return $check_captcha;
+        }
+        return resp_suc('密码重置成功');
     }
 
 }

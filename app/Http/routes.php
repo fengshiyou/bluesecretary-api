@@ -20,8 +20,11 @@ Route::post('/bluesecretaryHook','GithubHookController@index');
 
 Route::post('/login','UserController@login');//用户登录
 Route::post('/register','UserController@register');//用户注册
-Route::post('/register/captcha','UserController@register_captcha');//注册验证码
-//忘记密码
+Route::post('/captcha/register','UserController@register_captcha');//注册验证码
+Route::post('/captcha/forgetpass','UserController@captcha_forgetpass');//忘记密码验证码
+Route::post('/resetpass/forget','UserController@resetpass_forget');//忘记密码->重置密码
+
+
 //重置密码
 
 Route::get('/test','TestController@index');

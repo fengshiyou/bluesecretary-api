@@ -51,7 +51,7 @@ Class CaptchaService
         return 1;
     }
 
-    //删除验证码-----验证码被使用过后调用
+    //校验验证码
     public static function check_captcha($call, $type, $captcha)
     {
         $redis = Redis::connection('captcha');
